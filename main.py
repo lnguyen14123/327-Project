@@ -97,6 +97,9 @@ player1: Player = Player("purple", 40, 40)
 # put the player in the middle of the screen
 player1.position = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 
+butt = Button("Hello", pygame.Vector2(100 ,100), "green")
+butt.update_position(pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2))
+
 # this while loop runs once per frame
 # if you've ever used unity or godot, this is basically the Update()/process() function, while everything before is the Start() function
 while running:
