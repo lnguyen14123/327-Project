@@ -2,6 +2,7 @@
 import pygame
 from pygame.locals import *
 from button import Button
+from main_menu import MainMenu
 
 # TODO: sprites can be added to groups. figure out how to do this to render all players as a group
 class Player(pygame.sprite.Sprite):
@@ -47,6 +48,9 @@ class Player(pygame.sprite.Sprite):
         # hardcoding the screen size for now. hope this doesn't suck to decouple later!
         # also fun fact: pygame coordinates are fucked!
         # the top LEFT of the screen is (0,0), and the y coordinate gets BIGGER as you go down
+
+        # also, the rectangle still only reflects the size and not the position
+        # but this still works because we're only using the size with the player's current position
         if pos.x + self.rect.right > 1280:
             pos.x = 1280 - self.rect.right
         if pos.x + self.rect.left < 0:
@@ -100,6 +104,9 @@ player1.position = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 
 butt = Button("Hello", pygame.Vector2(100 ,100), "green")
 butt.update_position(pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2))
 
+menu = MainMenu()
+menu.exec(screen)
+
 # this while loop runs once per frame
 # if you've ever used unity or godot, this is basically the Update()/process() function, while everything before is the Start() function
 while running:
@@ -108,6 +115,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        # detect button press
         if event.type == pygame.MOUSEBUTTONDOWN:
             if butt.detect_press(pygame.mouse.get_pos()):
                 print("You pressed the button!")
