@@ -1,7 +1,6 @@
 # Example file showing a square moving on screen
 import pygame
 from pygame.locals import *
-from button import Button
 from main_menu import MainMenu
 
 # TODO: sprites can be added to groups. figure out how to do this to render all players as a group
@@ -75,15 +74,6 @@ class Player(pygame.sprite.Sprite):
         self.draw(surf)
 
 # TODO: add RemotePlayer class for other players in server
-
-
-def title_screen():
-    onTitleScreen = True
-    # TODO: set up the buttons and just loop to detect a button press
-    while onTitleScreen:
-        pass
-
-
     
 # pygame setup
 pygame.init()
@@ -101,9 +91,6 @@ player1: Player = Player("purple", 40, 40)
 # put the player in the middle of the screen
 player1.position = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 
-butt = Button("Hello", pygame.Vector2(100 ,100), "green")
-butt.update_position(pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2))
-
 menu = MainMenu()
 menu.exec(screen)
 
@@ -115,10 +102,6 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        # detect button press
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if butt.detect_press(pygame.mouse.get_pos()):
-                print("You pressed the button!")
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("white")
@@ -128,7 +111,6 @@ while running:
     screen.blit(bg_image, (0,0))
 
     player1.update(screen, dt)
-    butt.draw(screen)
 
     # flip() the display to put your work on screen
     pygame.display.flip()
