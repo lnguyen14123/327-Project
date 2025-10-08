@@ -1,0 +1,4 @@
+- add networking
+    - create UDP socket (for player positions)
+    - create message queue (for chat)
+    - create RPC (for player hit)
