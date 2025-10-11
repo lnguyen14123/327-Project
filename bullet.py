@@ -1,3 +1,6 @@
+import pygame
+
+
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, vel: pygame.Vector2, pos: pygame.Vector2):
         pygame.sprite.Sprite.__init__(self)
@@ -19,14 +22,13 @@ class Bullet(pygame.sprite.Sprite):
             pos.y = 720 - self.rect.bottom
         if pos.y + self.rect.top < 0:
             pos.y = 0 - self.rect.top
-        
+
         pos += self.velocity * dt
         self.position = pos
 
-        
     def draw(self, surf: pygame.Surface):
         surf.blit(self.img, self.position)
-    
+
     def update(self, surf: pygame.Surface, dt):
         self.movement_handler(dt)
         self.draw(surf)
