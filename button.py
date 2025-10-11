@@ -11,8 +11,8 @@ class Button (pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def update_position(self, pos: pygame.Vector2):
-        self.position = pos
-        self.rect.topleft = (pos.x, pos.y)
+        self.rect.center = (pos.x, pos.y)
+        self.position = pygame.Vector2(self.rect.topleft[0], self.rect.topleft[1])
     
     def detect_press(self, mouse_pos):
         return self.rect.collidepoint(mouse_pos[0], mouse_pos[1])
