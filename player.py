@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+from bullet import Bullet
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, color, width, height):
@@ -12,15 +13,20 @@ class Player(pygame.sprite.Sprite):
 
         # create an image
         # we'll load a proper sprite later, they'll just be a rectangle for testing
-        self.img: pygame.Surface = pygame.Surface([width, height])
-        self.img.fill(color)
+        # sprite groups automatically draw the value under self.image at the position of self.rect when the draw function is called
+        self.image: pygame.Surface = pygame.Surface([width, height])
+        self.image.fill(color)
 
         # creates a rectangle from the sprite. this is used for checking collisions and any bounds calculations
         # note: currently this rect only reflects the DIMENSIONS of the character, NOT its POSITION.
-        self.rect: pygame.rect.Rect = self.img.get_rect()
+        self.rect: pygame.rect.Rect = self.image.get_rect()
 
         # movespeed for the character
         self.movespeed: int = 900
+
+        # group that contains all instances of this player's bullets
+        self.bullets = pygame.sprite.Group()
+        self.bullet_speed = 200
 
     def movement_handler(self, dt: float):
         # create temporary position variable
@@ -31,13 +37,13 @@ class Player(pygame.sprite.Sprite):
         # keys is a list of all the keys that are currently pressed
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_w] or keys[pygame.K_UP]:
+        if keys[pygame.K_w]:
             pos.y -= self.movespeed * dt
-        if keys[pygame.K_s] or keys[pygame.K_DOWN]:
+        if keys[pygame.K_s]:
             pos.y += self.movespeed * dt
-        if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+        if keys[pygame.K_a]:
             pos.x -= self.movespeed * dt
-        if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+        if keys[pygame.K_d]:
             pos.x += self.movespeed * dt
 
         # detect edges of screen
@@ -57,19 +63,40 @@ class Player(pygame.sprite.Sprite):
             pos.y = 0
         
         # reassign position
-        update_position(pos)
+        self.update_position(pos)
 
     def draw(self, surf: pygame.Surface):
         # draws the player onto the given surface, probably the display surface
-        surf.blit(self.img, self.position)
+        surf.blit(self.image, self.position)
 
-    def update_position(pos: pygame.Vector2):
+    # simple helper function that updates both positions
+    def update_position(self, pos: pygame.Vector2):
         self.position = pos
         self.rect.topleft = pos.x, pos.y
 
-    def update(self, surf: pygame.Surface, dt):
-        # just calls movement handler and draw in one lol
-        # also update() is a built in function for sprites
+    def fire_bullet(self, vel: pygame.Vector2, pos: pygame.Vector2):
+        self.bullets.add(Bullet(vel, pos))
+
+    def bullet_handler(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_UP]:
+            pos = self.position + pygame.Vector2(0, -50)
+            self.fire_bullet(pygame.Vector2(0, -1)*self.bullet_speed, pos)
+        if keys[pygame.K_DOWN]:
+            pos = self.position + pygame.Vector2(0, 50)
+            self.fire_bullet(pygame.Vector2(0, 1)*self.bullet_speed, pos)
+        if keys[pygame.K_LEFT]:
+            pos = self.position + pygame.Vector2(-50, 0)
+            self.fire_bullet(pygame.Vector2(-1, 0)*self.bullet_speed, pos)
+        if keys[pygame.K_RIGHT]:
+            pos = self.position + pygame.Vector2(50, 0)
+            self.fire_bullet(pygame.Vector2(1, 0)*self.bullet_speed, pos)
+
+
+    def update(self, dt, surf):
+        # update() is a built in function for sprites
         # it doesn't do anything by default, but it's called by Group.update() when the sprite is in a group
-        self.movement_handler(dt)
-        self.draw(surf)
+        self.movement_handler(dt) 
+        self.bullet_handler()
+        self.bullets.update(dt)
+        self.bullets.draw(surf)

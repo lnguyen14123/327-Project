@@ -22,7 +22,12 @@ bg_image: pygame.Surface = pygame.image.load("Assets/win7_bg.jpg")
 player1: Player = Player("purple", 40, 40)
 
 # put the player in the middle of the screen
-player1.position = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
+player1.update_position(pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2))
+
+# adds the player to the group
+# we'll use this group with all the remote players as well
+# then when you call group.draw, it renders all the players at the same time
+player_group = pygame.sprite.Group(player1)
 
 menu = MainMenu()
 menu.exec(screen)
@@ -41,9 +46,11 @@ while running:
 
     # render the background
     # (technically, draw the background surface onto the display surface)
+    # screen fill into this must be done first, so everything draws in the right order
     screen.blit(bg_image, (0,0))
 
-    player1.update(screen, dt)
+    player_group.update(dt, screen)
+    player_group.draw(screen)
 
     # flip() the display to put your work on screen
     pygame.display.flip()
