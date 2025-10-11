@@ -7,6 +7,8 @@ from player import Player
 # TODO: sprites can be added to groups. figure out how to do this to render all players as a group
 
 # TODO: add RemotePlayer class for other players in server
+
+print("Hello! wasd to move, arrow keys to shoot.")
     
 # pygame setup
 pygame.init()
