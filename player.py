@@ -47,21 +47,25 @@ class Player(pygame.sprite.Sprite):
 
         # also, the rectangle still only reflects the size and not the position
         # but this still works because we're only using the size with the player's current position
-        if pos.x + self.rect.right > 1280:
-            pos.x = 1280 - self.rect.right
-        if pos.x + self.rect.left < 0:
-            pos.x = 0 - self.rect.left
-        if pos.y + self.rect.bottom > 720:
-            pos.y = 720 - self.rect.bottom
-        if pos.y + self.rect.top < 0:
-            pos.y = 0 - self.rect.top
+        if pos.x + self.rect.width > 1280:
+            pos.x = 1280 - self.rect.width
+        if pos.x < 0:
+            pos.x = 0
+        if pos.y + self.rect.height > 720:
+            pos.y = 720 - self.rect.height
+        if pos.y < 0:
+            pos.y = 0
         
         # reassign position
-        self.position = pos
+        update_position(pos)
 
     def draw(self, surf: pygame.Surface):
         # draws the player onto the given surface, probably the display surface
         surf.blit(self.img, self.position)
+
+    def update_position(pos: pygame.Vector2):
+        self.position = pos
+        self.rect.topleft = pos.x, pos.y
 
     def update(self, surf: pygame.Surface, dt):
         # just calls movement handler and draw in one lol
