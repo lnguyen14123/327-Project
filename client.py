@@ -12,8 +12,8 @@ def run_client(screen):
     sock.setblocking(False)
 
     player = Player("green", 40, 40)
-    player.position = pygame.Vector2(
-        screen.get_width() / 2, screen.get_height() / 2)
+    player.update_position(pygame.Vector2(
+        screen.get_width() / 2, screen.get_height() / 2))
     remote_players = {}
     bg = pygame.Surface(screen.get_size())
     bg.fill((50, 50, 50))
@@ -44,7 +44,7 @@ def run_client(screen):
                 for a, pos in positions.items():
                     if a not in remote_players:
                         remote_players[a] = Player("purple", 40, 40)
-                    remote_players[a].position = pygame.Vector2(pos[0], pos[1])
+                    remote_players[a].update_position(pygame.Vector2(pos[0], pos[1]))
         except BlockingIOError:
             pass
 
