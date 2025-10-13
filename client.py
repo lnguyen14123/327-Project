@@ -3,7 +3,7 @@ from player import Player
 import socket
 import pickle
 
-HOST_IP = "192.168.1.84"  # change this to host IP if on different machine
+HOST_IP = "127.0.0.1"  # change this to host IP if on different machine
 PORT = 9999
 
 
