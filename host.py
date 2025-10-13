@@ -63,6 +63,9 @@ def run_host(screen):
                     if a not in remote_players:
                         remote_players[a] = Player("green", 40, 40)
                     remote_players[a].update_position(pygame.Vector2(pos[0], pos[1]))
+                    # detect collision
+                    if remote_players[a].rect.colliderect(player.rect):
+                        print(f"You colliding with player {a}")
         except BlockingIOError:
             pass
 
