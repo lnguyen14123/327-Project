@@ -3,11 +3,21 @@ import pygame
 from player import Player
 import socket
 import pickle
+import Pyro5.api
+from chat_pubsub import *
 
 HOST_IP = "0.0.0.0"  # listen on all interfaces
 PORT = 9999
 clients = {}  # {addr: (x, y)}
 
+# maybe the worst way to do this
+def sub_thread(daemon: Pyro5.api.Daemon):
+    daemon.requestLoop()
+
+def pub_thread(pub: Publisher):
+    while True:
+        msg = input()
+        pub.publish(msg)
 
 def server_thread():
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -26,6 +36,18 @@ def server_thread():
 
 
 def run_host(screen):
+    # pubsub setup
+    # TODO: this and the threads could probably go in a seperate class
+    chat_pub = Publisher()
+    chat_sub = Subscriber()
+    chat_daemon = Pyro5.api.Daemon()
+    chat_uri = chat_daemon.register(chat_sub)
+
+    # another 2 threads yippee!!!
+    threading.Thread(target=sub_thread, daemon=True, args=(chat_daemon,)).start()
+    threading.Thread(target=pub_thread, daemon=True, args=(chat_pub,)).start()
+
+
     threading.Thread(target=server_thread, daemon=True).start()
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -51,7 +73,7 @@ def run_host(screen):
         player.update(screen, dt)
 
         # Send position to self (server)
-        data = pickle.dumps((player.position.x, player.position.y))
+        data = pickle.dumps((player.position.x, player.position.y, chat_uri))
         sock.sendto(data, ("127.0.0.1", PORT))
 
         # Receive remote player positions
@@ -62,6 +84,8 @@ def run_host(screen):
                 for a, pos in positions.items():
                     if a not in remote_players:
                         remote_players[a] = Player("green", 40, 40)
+                        # register subscriber
+                        chat_pub.register(Pyro5.api.Proxy(pos[2]))
                     remote_players[a].update_position(pygame.Vector2(pos[0], pos[1]))
                     # detect collision
                     if remote_players[a].rect.colliderect(player.rect):

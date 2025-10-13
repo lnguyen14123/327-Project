@@ -1,5 +1,4 @@
 from Pyro5.api import expose
-import asyncio
 
 @expose
 class Subscriber():
@@ -13,24 +12,11 @@ class Publisher():
     def __init__(self):
         self.subs: list[Subscriber] = []
 
-    def register(self, sub: Subscriber):
+    def register(self, sub):
         self.subs.append(sub)
     
     def publish(self, msg: str):
         for sub in self.subs:
+            # the thread this is running in must claim ownership of the proxy before it can use it
+            sub._pyroClaimOwnership()
             sub.recieve(msg)
-
-
-async def pub_task(pub: Publisher, sub: Subscriber):
-    pub.register(sub)
-    while (True):
-        msg = input()
-        pub.publish(msg)
-        if msg == "exit":
-            break
-
-pub = Publisher()
-sub = Subscriber()
-loop = asyncio.get_event_loop()
-loop.create_task(pub_task(pub, sub))
-loop.run_forever()
