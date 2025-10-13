@@ -1,4 +1,4 @@
-
+from Pyro5.api import expose
 
 class Publisher():
     def __init__(self):
@@ -11,9 +11,11 @@ class Publisher():
         for sub in self.subs:
             sub.recieve(msg)
 
+@expose
 class Subscriber():
     def __init__(self):
         pass
 
     def recieve(self, msg):
         print(msg)
+
