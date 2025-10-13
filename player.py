@@ -17,10 +17,11 @@ class Player(pygame.sprite.Sprite):
         self.image.fill(color)
 
         # creates a rectangle from the sprite. this is used for checking collisions and any bounds calculations
-        # note: currently this rect only reflects the DIMENSIONS of the character, NOT its POSITION.
+        # using the rect position and having a seperate position variable above may seem redundant, since we could just use the rect position as the render position for the object
+        # however I've been told that it's a good idea to have both, since rect can only have INTEGER (whole number) coordinates
         self.rect: pygame.rect.Rect = self.image.get_rect()
 
-        # movespeed for the character
+        # default movespeed for the character
         self.movespeed: int = 900
 
         # group that contains all instances of this player's bullets
@@ -37,6 +38,7 @@ class Player(pygame.sprite.Sprite):
         # keys is a list of all the keys that are currently pressed
         keys = pygame.key.get_pressed()
 
+        # checks which movement keys are being pressed
         if keys[pygame.K_w]:
             pos.y -= self.movespeed * dt
         if keys[pygame.K_s]:
@@ -47,12 +49,11 @@ class Player(pygame.sprite.Sprite):
             pos.x += self.movespeed * dt
 
         # detect edges of screen
-        # hardcoding the screen size for now. hope this doesn't suck to decouple later!
-        # also fun fact: pygame coordinates are fucked!
+        # hardcoding the screen size at 720p (1280x720). 
+        # hope this doesn't suck to decouple later if we end up needing to!
+        # also fun fact: pygame coordinates are really weird!
         # the top LEFT of the screen is (0,0), and the y coordinate gets BIGGER as you go down
 
-        # also, the rectangle still only reflects the size and not the position
-        # but this still works because we're only using the size with the player's current position
         if pos.x + self.rect.width > 1280:
             pos.x = 1280 - self.rect.width
         if pos.x < 0:
@@ -69,6 +70,7 @@ class Player(pygame.sprite.Sprite):
         surf.blit(self.image, self.position)
 
     # simple helper function that updates both positions
+    # always use this when changing the player position instead of setting it directly to they stay the same
     def update_position(self, pos: pygame.Vector2):
         self.position = pos
         self.rect.topleft = pos.x, pos.y

@@ -1,5 +1,15 @@
 from Pyro5.api import expose
 
+"""
+Each local player has 2 objects: a publisher and a subscriber. 
+
+The publisher's job is to take the local player's chat messages and send them to each remote subscriber object (i.e. each other remote player). It also keeps a list of all remote players' subscriber objects.
+
+The subscriber's job is to be accessed by another remote player, and used to display their chat messages on the local player's machine.
+
+the @expose means that Subscriber can be used as a remote object using Pyro5
+"""
+
 @expose
 class Subscriber():
     def __init__(self):

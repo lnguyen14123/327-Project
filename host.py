@@ -11,6 +11,7 @@ PORT = 9999
 clients = {}  # {addr: (x, y)}
 
 # maybe the worst way to do this
+# more details on why this is the worst way to do this in client.py
 def sub_thread(daemon: Pyro5.api.Daemon):
     daemon.requestLoop()
 
