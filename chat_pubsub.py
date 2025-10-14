@@ -18,15 +18,25 @@ class Subscriber():
     def recieve(self, msg):
         print(msg)
 
-class Publisher():
-    def __init__(self):
-        self.subs: list[Subscriber] = []
+    def on_collision(self, addr):
+        print(f"You just collided with the player at {addr}!")
 
-    def register(self, sub):
+class Publisher():
+    def __init__(self, host_ip, port):
+        self.subs: list[Subscriber] = []
+        self.subs_dict = {}
+        self.address = (host_ip, port)
+
+    def register(self, sub, addr):
         self.subs.append(sub)
+        self.subs_dict.update({addr: sub})
     
     def publish(self, msg: str):
         for sub in self.subs:
             # the thread this is running in must claim ownership of the proxy before it can use it
             sub._pyroClaimOwnership()
             sub.recieve(msg)
+
+    def collide(self, a):
+        self.subs_dict[a].on_collision(self.address)
+        

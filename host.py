@@ -52,7 +52,7 @@ def server_thread(stop_event: threading.Event):
 def run_host(screen):
     # pubsub setup
     # TODO: this and the threads could probably go in a seperate class
-    chat_pub = Publisher()
+    chat_pub = Publisher(HOST_IP, PORT)
     chat_sub = Subscriber()
     chat_daemon = Pyro5.api.Daemon()
     chat_uri = chat_daemon.register(chat_sub)
@@ -99,11 +99,11 @@ def run_host(screen):
                     if a not in remote_players:
                         remote_players[a] = Player("green", 40, 40)
                         # register subscriber
-                        chat_pub.register(Pyro5.api.Proxy(pos[2]))
+                        chat_pub.register(Pyro5.api.Proxy(pos[2]), a)
                     remote_players[a].update_position(pygame.Vector2(pos[0], pos[1]))
                     # detect collision
                     if remote_players[a].rect.colliderect(player.rect):
-                        print(f"You colliding with player {a}")
+                        chat_pub.collide(a)
         except BlockingIOError:
             pass
 
