@@ -15,3 +15,5 @@ in another terminal do python main.py and click the green button
 you should get two windows and you should see two players (squares)
 
 use wasd for player movement
+
+currently, one of the threads handles chat input on both host and client, using the input() function so chat can run in the terminal. Eventually, it will be put in-game, but currently, you need to press enter so the thread to stop hanging and the program fully exits. 

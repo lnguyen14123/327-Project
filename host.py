@@ -17,23 +17,36 @@ def sub_thread(daemon: Pyro5.api.Daemon):
 
 def pub_thread(pub: Publisher):
     while True:
+        # input blocks this thread from finishing until an input occurs
+        # this will be fixed when chat is added in-game instead of the terminal
         msg = input()
         pub.publish(msg)
 
-def server_thread():
+def server_thread(stop_event: threading.Event):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((HOST_IP, PORT))
     sock.setblocking(False)
-    while True:
+    server_running = True
+    while server_running:
         try:
+            # stop the thread if the program exits
+            if stop_event.is_set():
+                print("We stopping!")
+                server_running = False
+
             data, addr = sock.recvfrom(1024)
             pos = pickle.loads(data)
             clients[addr] = pos
             # send other players back
             others = {a: p for a, p in clients.items() if a != addr}
-            sock.sendto(pickle.dumps(others), addr)
+            sock.sendto(pickle.dumps(others), addr) 
+                
         except BlockingIOError:
             continue
+
+    sock.close()
+
+    
 
 
 def run_host(screen):
@@ -48,8 +61,8 @@ def run_host(screen):
     threading.Thread(target=sub_thread, daemon=True, args=(chat_daemon,)).start()
     threading.Thread(target=pub_thread, daemon=True, args=(chat_pub,)).start()
 
-
-    threading.Thread(target=server_thread, daemon=True).start()
+    stop_event = threading.Event()
+    threading.Thread(target=server_thread, args=(stop_event,)).start()
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.setblocking(False)
@@ -101,3 +114,8 @@ def run_host(screen):
         for p in remote_players.values():
             p.draw(screen)
         pygame.display.flip()
+
+    # all the stuff that needs to happen after the game closes
+    chat_daemon.shutdown()
+    stop_event.set()
+    

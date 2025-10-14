@@ -100,3 +100,6 @@ def run_client(screen):
         for p in remote_players.values():
             p.draw(screen)
         pygame.display.flip()
+
+    chat_daemon.shutdown()
+    sock.close()
