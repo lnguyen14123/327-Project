@@ -58,7 +58,7 @@ def run_host(screen):
     # TODO: this and the threads could probably go in a seperate class
     chat_pub = Publisher(HOST_IP, PORT)
     chat_sub = Subscriber()
-    chat_daemon = Pyro5.api.Daemon(host=HOST_IP, port=CHAT_PORT)
+    chat_daemon = Pyro5.api.Daemon(host=HOST_IP)
     chat_uri = chat_daemon.register(chat_sub)
 
     # another 2 threads yippee!!!
