@@ -8,6 +8,7 @@ from chat_pubsub import *
 
 HOST_IP = "0.0.0.0"  # listen on all interfaces
 PORT = 9999
+CHAT_PORT = 9998
 clients = {}  # {addr: (x, y)}
 
 # maybe the worst way to do this
@@ -50,11 +51,14 @@ def server_thread(stop_event: threading.Event):
 
 
 def run_host(screen):
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.setblocking(False)
     # pubsub setup
     # TODO: this and the threads could probably go in a seperate class
     chat_pub = Publisher(HOST_IP, PORT)
     chat_sub = Subscriber()
-    chat_daemon = Pyro5.api.Daemon()
+    chat_daemon = Pyro5.api.Daemon(host=HOST_IP, port=CHAT_PORT)
     chat_uri = chat_daemon.register(chat_sub)
 
     # another 2 threads yippee!!!
@@ -63,9 +67,6 @@ def run_host(screen):
 
     stop_event = threading.Event()
     threading.Thread(target=server_thread, args=(stop_event,)).start()
-
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.setblocking(False)
 
     player = Player("purple", 40, 40)
     player.update_position(pygame.Vector2(

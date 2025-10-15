@@ -12,6 +12,7 @@ import threading
 
 HOST_IP = "127.0.0.1"  # change this to host IP if on different machine
 PORT = 9999
+CHAT_PORT = 9997
 
 # maybe the worst way to do this
 # it feels like there would be a better way than to spin up 2 threads just for the chat
@@ -34,7 +35,7 @@ def run_client(screen):
     # TODO: this and the threads could probably go in a seperate class
     chat_pub = Publisher(HOST_IP, PORT)
     chat_sub = Subscriber()
-    chat_daemon = Pyro5.api.Daemon()
+    chat_daemon = Pyro5.api.Daemon(host=HOST_IP, port=CHAT_PORT)
     chat_uri = chat_daemon.register(chat_sub)
 
     # another 2 threads yippee!!!
