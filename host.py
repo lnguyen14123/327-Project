@@ -12,7 +12,8 @@ from chat_pubsub import *
 # from itself (localhost), as well as other computers on the local network
 # this makes it easy to test on both fronts
 HOST_IP = "0.0.0.0"  # listen on all interfaces
-OWN_IP = socket.gethostbyname(socket.gethostname()) # the local ip of this computer
+# OWN_IP = socket.gethostbyname(socket.gethostname()) # the local ip of this computer
+OWN_IP = "192.168.1.84"
 PORT = 9999
 CHAT_PORT = 9998
 clients = {}  # {addr: (x, y)}
