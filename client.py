@@ -18,7 +18,7 @@ CHAT_PORT = 9997
 # it feels like there would be a better way than to spin up 2 threads just for the chat
 # these *are* software threads though. 
 # I feel like asyncio coroutines would work for this, since from what I've briefly read they might be more lightweight than threads
-# but I couldn't figure out how to run then in the background properly, and we're already using threads for that anyway
+# but I couldn't figure out how to run them looped in the background properly, we're already using threads, and these are extremely lightweight functions anyway.
 def sub_thread(daemon: Pyro5.api.Daemon):
     daemon.requestLoop()
 
@@ -28,6 +28,10 @@ def pub_thread(pub: Publisher):
         pub.publish(msg)
 
 def run_client(screen):
+    # AF_INET means the socket will use IPv4
+    # IPv6 is also used, so this is an important distinction
+    # SOCK_DGRAM (basically) assigns the port to use UDP
+    # SOCK_STREAM is used for TCP connections
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.setblocking(False)
 
@@ -35,7 +39,7 @@ def run_client(screen):
     # TODO: this and the threads could probably go in a seperate class
     chat_pub = Publisher(HOST_IP, PORT)
     chat_sub = Subscriber()
-    chat_daemon = Pyro5.api.Daemon(host=HOST_IP)
+    chat_daemon = Pyro5.api.Daemon(host=HOST_IP, port=CHAT_PORT)
     chat_uri = chat_daemon.register(chat_sub)
 
     # another 2 threads yippee!!!
@@ -48,16 +52,23 @@ def run_client(screen):
     player.update_position(pygame.Vector2(
         screen.get_width() / 2, screen.get_height() / 2))
     remote_players = {}
+
+    # sets up the background
     bg = pygame.Surface(screen.get_size())
     bg.fill((50, 50, 50))
     bg_image = pygame.image.load("Assets/win7_bg.jpg")
 
+    # clock is used for locking framerate
+    # this game runs (or tries to run) at 60 frames / second
     clock = pygame.time.Clock()
     running = True
 
     while running:
+        # dt is the amount of time passed since the last frame
         dt = clock.tick(60) / 1000
 
+        # this is the pygame event queue, the only thing it checks for here is if the QUIT event is fired (which happens when you close the window)
+        # the player class also checks the event queue for keyboard inputs so it can move
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -65,10 +76,8 @@ def run_client(screen):
         # Update local player
         player.update(screen, dt)
 
-        # Send position to host
-
-        # also sends chat subscriber uri now
-        # definitely the worst way to do this!
+        # Send position and chat URI to host
+        # this is an admittedly wasteful way to send the URI
         # The chat URI should ideally be sent once upon connection
         # doing it this way means there is functionally useless data being sent along with the player position
         # however, the amount of data being transmitted is so little that it should be fine
@@ -102,5 +111,6 @@ def run_client(screen):
             p.draw(screen)
         pygame.display.flip()
 
+    # stuff that happens after the game is closed. 
     chat_daemon.shutdown()
     sock.close()

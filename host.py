@@ -6,6 +6,11 @@ import pickle
 import Pyro5.api
 from chat_pubsub import *
 
+# more detailed comments in client.py
+
+# binding to the 0.0.0.0 IP address means the program can accept connections
+# from itself (localhost), as well as other computers on the local network
+# this makes it easy to test on both fronts
 HOST_IP = "0.0.0.0"  # listen on all interfaces
 PORT = 9999
 CHAT_PORT = 9998
@@ -32,7 +37,6 @@ def server_thread(stop_event: threading.Event):
         try:
             # stop the thread if the program exits
             if stop_event.is_set():
-                print("We stopping!")
                 server_running = False
 
             data, addr = sock.recvfrom(1024)
@@ -47,8 +51,6 @@ def server_thread(stop_event: threading.Event):
 
     sock.close()
 
-    
-
 
 def run_host(screen):
 
@@ -58,7 +60,7 @@ def run_host(screen):
     # TODO: this and the threads could probably go in a seperate class
     chat_pub = Publisher(HOST_IP, PORT)
     chat_sub = Subscriber()
-    chat_daemon = Pyro5.api.Daemon(host=HOST_IP)
+    chat_daemon = Pyro5.api.Daemon(host=HOST_IP, port=CHAT_PORT)
     chat_uri = chat_daemon.register(chat_sub)
 
     # another 2 threads yippee!!!
