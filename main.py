@@ -14,7 +14,7 @@ from client import run_client
 
 print("Hello! wasd to move, arrow keys to shoot.")
 
-# pygame setups
+# pygame setupsd]
 
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
