@@ -38,6 +38,10 @@ class Publisher():
             sub.recieve(msg)
 
     def collide(self, a):
+        # this method is called in the main thread when 2 players collide, which didn't work once you used chat, since the chat thread claims ownership of the remote object and the main thread couldn't access that object anymore
+        # but the chat thread claims ownership on every message, so if we claim ownership on every collision chat will just claim it back when we use it
+        # this causes a crazy (but isolated) error when you try to collide and chat at the same time though
+        # so don't do that
         self.subs_dict[a]._pyroClaimOwnership()
         self.subs_dict[a].on_collision(self.address)
         

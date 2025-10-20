@@ -100,10 +100,6 @@ def run_client(screen):
                     # detect collision
                     # we can use this for RPC
                     if remote_players[a].rect.colliderect(player.rect):
-                        # we have to have the main thread claim ownership when this call happens
-                        # if you use the chat at all, the chat thread claims ownership, and this doesn't work anymore
-                        # but the chat thread claims ownership on every message, so if we claim ownership on every collision chat will just claim it back when we use it
-                        # this will still probably cause a problem if you chat WHILE colliding though
                         chat_pub.collide(a)
         except BlockingIOError:
             pass
