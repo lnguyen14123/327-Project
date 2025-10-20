@@ -1,4 +1,5 @@
-- add networking
-    - create UDP socket (for player positions)
-    - create message queue (for chat)
-    - create RPC (for player hit)
+- error handlers
+    - collision while chatting
+    - host leaves
+        - we'll need to turn this into full host migration later
+        - this should hopefully be as simple as starting the host thread on a different machine, since all the other machines are still connected to each other
