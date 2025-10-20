@@ -10,7 +10,7 @@ import threading
 
 """
 
-HOST_IP = "192.168.1.84"  # change this to host IP if on different machine
+HOST_IP = "10.119.155.246"  # change this to host IP if on different machine
 OWN_IP = socket.gethostbyname(socket.gethostname()) # the local ip of this computer
 PORT = 9999
 CHAT_PORT = 9998
@@ -40,7 +40,7 @@ def run_client(screen):
     # TODO: this and the threads could probably go in a seperate class
     chat_pub = Publisher(HOST_IP, PORT)
     chat_sub = Subscriber()
-    chat_daemon = Pyro5.api.Daemon(host="192.168.1.19", port=CHAT_PORT)
+    chat_daemon = Pyro5.api.Daemon(host=OWN_IP, port=CHAT_PORT)
     chat_uri = chat_daemon.register(chat_sub)
 
     # another 2 threads yippee!!!
@@ -100,6 +100,11 @@ def run_client(screen):
                     # detect collision
                     # we can use this for RPC
                     if remote_players[a].rect.colliderect(player.rect):
+                        # we have to have the main thread claim ownership when this call happens
+                        # if you use the chat at all, the chat thread claims ownership, and this doesn't work anymore
+                        # but the chat thread claims ownership on every message, so if we claim ownership on every collision chat will just claim it back when we use it
+                        # this will still probably cause a problem if you chat WHILE colliding though
+                        chat_pub._pyroClaimOwnership()
                         chat_pub.collide(a)
         except BlockingIOError:
             pass
