@@ -38,5 +38,6 @@ class Publisher():
             sub.recieve(msg)
 
     def collide(self, a):
+        self.subs_dict[a]._pyroClaimOwnership()
         self.subs_dict[a].on_collision(self.address)
         

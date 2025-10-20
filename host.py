@@ -108,7 +108,6 @@ def run_host(screen):
                     remote_players[a].update_position(pygame.Vector2(pos[0], pos[1]))
                     # detect collision
                     if remote_players[a].rect.colliderect(player.rect):
-                        chat_pub._pyroClaimOwnership()
                         chat_pub.collide(a)
         except BlockingIOError:
             pass
