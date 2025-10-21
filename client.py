@@ -7,15 +7,17 @@ import Pyro5.api
 import threading
 
 """
-
+NOTE: 
+socket.gethostbyname(socket.gethostname()) doesn't work properly if you have a vpn. 
+Even if it's off, it might still get the IP of the VPN controller instead of your actual LAN ip
+In this case, run `ipconfig` (or `ip a` on linux) and replace OWN_IP with your actual LAN ip (most likely 192.168.1.x)
 """
 
-HOST_IP = "10.119.155.246"  # change this to host IP if on different machine
+HOST_IP = "127.0.0.1"  # change this to the IP of the remote machine if running over LAN
 OWN_IP = socket.gethostbyname(socket.gethostname()) # the local ip of this computer
 PORT = 9999
-CHAT_PORT = 9998
+CHAT_PORT = 9997 # if testing locally, change this to something different than the host
 
-# maybe the worst way to do this
 # it feels like there would be a better way than to spin up 2 threads just for the chat
 # these *are* software threads though. 
 # I feel like asyncio coroutines would work for this, since from what I've briefly read they might be more lightweight than threads
@@ -30,7 +32,7 @@ def pub_thread(pub: Publisher):
 
 def run_client(screen):
     # AF_INET means the socket will use IPv4
-    # IPv6 is also used, so this is an important distinction
+    # IPv6 is used elsewhere (in general, not in this program), so this is an important distinction
     # SOCK_DGRAM (basically) assigns the port to use UDP
     # SOCK_STREAM is used for TCP connections
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -40,7 +42,7 @@ def run_client(screen):
     # TODO: this and the threads could probably go in a seperate class
     chat_pub = Publisher(HOST_IP, PORT)
     chat_sub = Subscriber()
-    chat_daemon = Pyro5.api.Daemon(host=OWN_IP, port=CHAT_PORT)
+    chat_daemon = Pyro5.api.Daemon(host=OWN_IP)
     chat_uri = chat_daemon.register(chat_sub)
 
     # another 2 threads yippee!!!
@@ -93,12 +95,12 @@ def run_client(screen):
                 positions = pickle.loads(recv_data)
                 for a, pos in positions.items():
                     if a not in remote_players:
+                        # add new remote player to the list
                         remote_players[a] = Player("purple", 40, 40)
-                        # register subscriber
+                        # register that remote player's subscriber object
                         chat_pub.register(Pyro5.api.Proxy(pos[2]), a)
                     remote_players[a].update_position(pygame.Vector2(pos[0], pos[1]))
                     # detect collision
-                    # we can use this for RPC
                     if remote_players[a].rect.colliderect(player.rect):
                         chat_pub.collide(a)
         except BlockingIOError:
