@@ -3,3 +3,4 @@
     - host leaves
         - we'll need to turn this into full host migration later
         - this should hopefully be as simple as starting the host thread on a different machine, since all the other machines are still connected to each other
+    - collide with disconnected player
