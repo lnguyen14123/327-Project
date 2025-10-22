@@ -15,11 +15,16 @@ class MainMenu:
         # renders the buttons, then uses a while loop to detect the click
 
         screen.fill("black")
+
         # adds offset for both buttons
+
         offset = 50
-        self.HostButton.update_position(pygame.Vector2(screen.get_width() / 2, (screen.get_height() / 2) + offset))
-        self.JoinButton.update_position(pygame.Vector2(screen.get_width() / 2, (screen.get_height() / 2) - offset))
-        self.ButtonGroup.draw(screen)
+        self.HostButton.update_position(pygame.Vector2(
+            screen.get_width() / 2, screen.get_height() / 2 + offset))
+        self.JoinButton.update_position(pygame.Vector2(
+            screen.get_width() / 2, screen.get_height() / 2 - offset))
+        self.HostButton.draw(screen)
+        self.JoinButton.draw(screen)
         pygame.display.flip()
 
         running = True
