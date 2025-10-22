@@ -1,5 +1,6 @@
 import pygame
-
+from pygame.locals import *
+from bullet import Bullet
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, color, width, height):
@@ -62,15 +63,15 @@ class Player(pygame.sprite.Sprite):
             pos.y = 720 - self.rect.height
         if pos.y < 0:
             pos.y = 0
-
+        
         # reassign position
         self.update_position(pos)
 
-    def draw(self, surf):
+    def draw(self, surf: pygame.Surface):
+        # draws the player onto the given surface, probably the display surface
         surf.blit(self.image, self.position)
 
     # simple helper function that updates both positions
-    # always use this when changing the player position instead of setting it directly to they stay the same
     def update_position(self, pos: pygame.Vector2):
         self.position = pos
         self.rect.topleft = pos.x, pos.y
@@ -93,10 +94,11 @@ class Player(pygame.sprite.Sprite):
             pos = self.position + pygame.Vector2(50, 0)
             self.fire_bullet(pygame.Vector2(1, 0)*self.bullet_speed, pos)
 
-    def update(self, surf, dt):
-        self.movement_handler(dt)
-        self.draw(surf)
 
-        # self.bullet_handler()
+    def update(self, dt, surf):
+        # update() is a built in function for sprites
+        # it doesn't do anything by default, but it's called by Group.update() when the sprite is in a group
+        self.movement_handler(dt) 
+        self.bullet_handler()
         # self.bullets.update(dt)
         # self.bullets.draw(surf)
