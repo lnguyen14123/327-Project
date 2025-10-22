@@ -1,2 +1,3 @@
 __pycache__/
-.venv/
+.venv/lib/python3.12/site-packages/__pycache__
+.venv/lib/python3.12/site-packages/Pyro5/__pycache__
