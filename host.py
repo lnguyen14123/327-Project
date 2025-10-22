@@ -27,7 +27,7 @@ def pub_thread(pub: Publisher):
         msg = input()
         pub.publish(msg)
 
-def server_thread(stop_event: threading.Event):
+def server_thread(stoclientsp_event: threading.Event):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((HOST_IP, PORT))
     sock.setblocking(False)
@@ -38,10 +38,13 @@ def server_thread(stop_event: threading.Event):
             if stop_event.is_set():
                 server_running = False
 
+            # recieve one player's position
             data, addr = sock.recvfrom(1024)
             pos = pickle.loads(data)
             clients[addr] = pos
-            # send other players back
+
+            # send other players' positions back 
+            # to the player that just sent their address
             others = {a: p for a, p in clients.items() if a != addr}
             sock.sendto(pickle.dumps(others), addr) 
                 
@@ -103,7 +106,7 @@ def run_host(screen):
                         # register subscriber
                         chat_pub.register(Pyro5.api.Proxy(pos[2]), a)
                     remote_players[a].update_position(pygame.Vector2(pos[0], pos[1]))
-                    # detect collision
+                    # detect collision 
                     if remote_players[a].rect.colliderect(player.rect):
                         chat_pub.collide(a)
         except BlockingIOError:
