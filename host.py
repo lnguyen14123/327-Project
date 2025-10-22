@@ -27,7 +27,7 @@ def pub_thread(pub: Publisher):
         msg = input()
         pub.publish(msg)
 
-def server_thread(stoclientsp_event: threading.Event):
+def server_thread(stop_event: threading.Event):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((HOST_IP, PORT))
     sock.setblocking(False)
