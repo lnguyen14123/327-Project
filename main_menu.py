@@ -1,30 +1,21 @@
 import pygame
 from button import Button
 
-# this screen lets the user choose whether they want to connect to an existing instance or make a new one
+# This screen lets the user start the game in fully P2P mode
 
 
 class MainMenu:
     def __init__(self):
-        self.HostButton = Button(
-            "Create new instance", pygame.Vector2(150, 50), "white")
-        self.JoinButton = Button(
-            "Join existing instance", pygame.Vector2(150, 50), "green")
+        self.PlayButton = Button(
+            "Play", pygame.Vector2(200, 60), "green"
+        )
 
     def exec(self, screen: pygame.Surface):
-        # renders the buttons, then uses a while loop to detect the click
-
+        # Render the button in the center of the screen
         screen.fill("black")
-
-        # adds offset for both buttons
-
-        offset = 50
-        self.HostButton.update_position(pygame.Vector2(
-            screen.get_width() / 2, screen.get_height() / 2 + offset))
-        self.JoinButton.update_position(pygame.Vector2(
-            screen.get_width() / 2, screen.get_height() / 2 - offset))
-        self.HostButton.draw(screen)
-        self.JoinButton.draw(screen)
+        self.PlayButton.update_position(pygame.Vector2(
+            screen.get_width() / 2, screen.get_height() / 2))
+        self.PlayButton.draw(screen)
         pygame.display.flip()
 
         running = True
@@ -33,10 +24,7 @@ class MainMenu:
                 if event.type == pygame.QUIT:
                     return None
 
-                # detect button press
-
+                # Detect button press
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if self.HostButton.detect_press(pygame.mouse.get_pos()):
-                        return "host"
-                    if self.JoinButton.detect_press(pygame.mouse.get_pos()):
-                        return "join"
+                    if self.PlayButton.detect_press(pygame.mouse.get_pos()):
+                        return "play"

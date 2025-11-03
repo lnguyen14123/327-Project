@@ -5,73 +5,133 @@ import socket
 import pickle
 import Pyro5.api
 import threading
+import time
+import struct
 
-"""
-NOTE: 
-socket.gethostbyname(socket.gethostname()) doesn't work properly if you have a vpn. 
-Even if it's off, it might still get the IP of the VPN controller instead of your actual LAN ip
-In this case, run `ipconfig` (or `ip a` on linux) and replace OWN_IP with your actual LAN ip (most likely 192.168.1.x)
-"""
+# ------------------- SETTINGS -------------------
+OWN_IP = socket.gethostbyname(socket.gethostname())
+DISCOVERY_GRP = "224.1.1.1"   # multicast group for discovery
+DISCOVERY_PORT = 10000         # multicast port
+DISCOVERY_INTERVAL = 2         # seconds between broadcasts
 
-HOST_IP = "127.0.0.1"  # change this to the IP of the remote machine if running over LAN
-OWN_IP = socket.gethostbyname(socket.gethostname()) # the local ip of this computer
-PORT = 9999
-CHAT_PORT = 9997 # if testing locally, change this to something different than the host
+# ------------------- THREADS -------------------
 
-# it feels like there would be a better way than to spin up 2 threads just for the chat
-# these *are* software threads though. 
-# I feel like asyncio coroutines would work for this, since from what I've briefly read they might be more lightweight than threads
-# but I couldn't figure out how to run them looped in the background properly, we're already using threads, and these are extremely lightweight functions anyway.
+
 def sub_thread(daemon: Pyro5.api.Daemon):
+    """Handles incoming Pyro5 calls for chat/collision."""
     daemon.requestLoop()
 
+
 def pub_thread(pub: Publisher):
+    """Handles outgoing chat messages from terminal."""
     while True:
         msg = input()
         pub.publish(msg)
 
-def run_client(screen):
-    # AF_INET means the socket will use IPv4
-    # IPv6 is used elsewhere (in general, not in this program), so this is an important distinction
-    # SOCK_DGRAM (basically) assigns the port to use UDP
-    # SOCK_STREAM is used for TCP connections
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+def announce_self(game_port, chat_uri, stop_event):
+    """Broadcast this client's existence using multicast."""
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+    sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 2)
+
+    msg = pickle.dumps((OWN_IP, game_port, chat_uri))
+    while not stop_event.is_set():
+        sock.sendto(msg, (DISCOVERY_GRP, DISCOVERY_PORT))
+        time.sleep(DISCOVERY_INTERVAL)
+
+
+def listen_peers(peers, peers_lock, chat_pub, stop_event, self_chat_uri):
+    """
+    Listen for discovery messages from other peers and add them to peers dict.
+    Uses self_chat_uri to ignore your own announcements.
+    """
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    try:
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT,
+                        1)  # macOS / Linux
+    except AttributeError:
+        pass
+
+    sock.bind(('', DISCOVERY_PORT))
+    mreq = struct.pack("4s4s", socket.inet_aton(
+        DISCOVERY_GRP), socket.inet_aton("0.0.0.0"))
+    sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
     sock.setblocking(False)
 
-    # pubsub setup
-    # TODO: this and the threads could probably go in a seperate class
-    chat_pub = Publisher(HOST_IP, PORT)
+    while not stop_event.is_set():
+        try:
+            data, addr = sock.recvfrom(1024)
+            peer_ip, peer_game_port, peer_chat_uri = pickle.loads(data)
+
+            # Ignore self by chat_uri
+            if peer_chat_uri == self_chat_uri:
+                continue
+
+            peer_addr = (peer_ip, peer_game_port)
+            with peers_lock:
+                if peer_addr not in peers:
+                    peers[peer_addr] = peer_chat_uri
+                    chat_pub.register(Pyro5.api.Proxy(
+                        peer_chat_uri), peer_addr)
+                    print(f"Discovered peer: {peer_addr}")
+
+        except BlockingIOError:
+            continue
+        except Exception as e:
+            print("listen_peers error:", e)
+
+# ------------------- CLIENT / GAME LOOP -------------------
+
+
+def run_client(screen):
+    # ------------------- GAME SOCKET -------------------
+    game_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    game_sock.bind((OWN_IP, 0))  # OS picks free port
+    game_port = game_sock.getsockname()[1]
+    game_sock.setblocking(False)
+
+    # ------------------- CHAT SETUP -------------------
+    chat_pub = Publisher(OWN_IP, game_port)
     chat_sub = Subscriber()
     chat_daemon = Pyro5.api.Daemon(host=OWN_IP)
     chat_uri = chat_daemon.register(chat_sub)
 
-    # another 2 threads yippee!!!
-    threading.Thread(target=sub_thread, daemon=True, args=(chat_daemon,)).start()
+    threading.Thread(target=sub_thread, daemon=True,
+                     args=(chat_daemon,)).start()
     threading.Thread(target=pub_thread, daemon=True, args=(chat_pub,)).start()
 
+    # ------------------- PEER DISCOVERY -------------------
+    peers = {}  # peer_addr -> chat_uri
+    peers_lock = threading.Lock()
+    stop_event = threading.Event()
 
-    # sets up the player
+    threading.Thread(target=announce_self, daemon=True, args=(
+        game_port, chat_uri, stop_event)).start()
+
+    # threading.Thread(target=listen_peers, daemon=True, args=(
+    #     peers, peers_lock, chat_pub, stop_event)).start()
+
+    # After chat setup
+    self_chat_uri = chat_uri  # your unique identifier
+    threading.Thread(
+        target=listen_peers,
+        daemon=True,
+        args=(peers, peers_lock, chat_pub, stop_event, self_chat_uri)
+    ).start()
+
+    # ------------------- PLAYER SETUP -------------------
     player = Player("green", 40, 40)
     player.update_position(pygame.Vector2(
         screen.get_width() / 2, screen.get_height() / 2))
     remote_players = {}
 
-    # sets up the background
-    bg = pygame.Surface(screen.get_size())
-    bg.fill((50, 50, 50))
     bg_image = pygame.image.load("Assets/win7_bg.jpg")
-
-    # clock is used for locking framerate
-    # this game runs (or tries to run) at 60 frames / second
     clock = pygame.time.Clock()
     running = True
 
     while running:
-        # dt is the amount of time passed since the last frame
         dt = clock.tick(60) / 1000
-
-        # this is the pygame event queue, the only thing it checks for here is if the QUIT event is fired (which happens when you close the window)
-        # the player class also checks the event queue for keyboard inputs so it can move
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -79,41 +139,37 @@ def run_client(screen):
         # Update local player
         player.update(screen, dt)
 
-        # Send position and chat URI to host
-        # this is an admittedly wasteful way to send the URI
-        # The chat URI should ideally be sent once upon connection
-        # doing it this way means there is functionally useless data being sent along with the player position
-        # however, the amount of data being transmitted is so little that it should be fine
-        # I do want to check exactly how many bytes are being sent here just for my own curiosity
+        # ------------------- SEND LOCAL POSITION -------------------
         data = pickle.dumps((player.position.x, player.position.y, chat_uri))
-        sock.sendto(data, (HOST_IP, PORT))
+        with peers_lock:
+            for (peer_ip, peer_port), _ in peers.items():
+                game_sock.sendto(data, (peer_ip, peer_port))
 
-        # Receive other player positions
+        # ------------------- RECEIVE REMOTE POSITIONS -------------------
         try:
             while True:
-                recv_data, addr = sock.recvfrom(1024)
-                positions = pickle.loads(recv_data)
-                for a, pos in positions.items():
-                    if a not in remote_players:
-                        # add new remote player to the list
-                        remote_players[a] = Player("purple", 40, 40)
-                        # register that remote player's subscriber object
-                        chat_pub.register(Pyro5.api.Proxy(pos[2]), a)
-                    remote_players[a].update_position(pygame.Vector2(pos[0], pos[1]))
-                    # detect collision
-                    if remote_players[a].rect.colliderect(player.rect):
-                        chat_pub.collide(a)
+                recv_data, addr = game_sock.recvfrom(1024)
+                x, y, remote_chat_uri = pickle.loads(recv_data)
+
+                with peers_lock:
+                    if addr not in remote_players:
+                        remote_players[addr] = Player("purple", 40, 40)
+                        chat_pub.register(
+                            Pyro5.api.Proxy(remote_chat_uri), addr)
+                    remote_players[addr].update_position(pygame.Vector2(x, y))
+                    if remote_players[addr].rect.colliderect(player.rect):
+                        chat_pub.collide(addr)
         except BlockingIOError:
             pass
 
-        # Draw everything
+        # ------------------- DRAW -------------------
         screen.blit(bg_image, (0, 0))
-
         player.draw(screen)
         for p in remote_players.values():
             p.draw(screen)
         pygame.display.flip()
 
-    # stuff that happens after the game is closed. 
+    # ------------------- CLEANUP -------------------
+    stop_event.set()
     chat_daemon.shutdown()
-    sock.close()
+    game_sock.close()

@@ -1,40 +1,28 @@
-
-# Example file showing a square moving on screen
-
-
 import pygame
 from main_menu import MainMenu
-from host import run_host
 from client import run_client
 import sys
 
-
-# TODO: sprites can be added to groups. figure out how to do this to render all players as a group
-
-# TODO: add RemotePlayer class for other players in server
-
 print("Hello! wasd to move, arrow keys to shoot.")
 
-# pygame setupsd]
-
+# Pygame setup
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption("CECS 327")
+
+# If no command line arguments, show menu
 choice = ""
-
-# if you give the program a command line argument upon running, it will automatically boot in that mode
-# otherwise, it'll boot like normal and allow you to choose
-# this is so the simload.sh file can boot everything automatically instead of having to click the button on every window
-
-if (len(sys.argv) <= 1):
+if len(sys.argv) <= 1:
     menu = MainMenu()
     choice = menu.exec(screen)
 
-if choice == "host" or sys.argv[1] == "host":
-    run_host(screen)
-elif choice == "join" or sys.argv[1] == "join":
+# In fully P2P design, no host is needed
+# All players just run the client
+# Optionally, you can skip the menu if a CLI argument is provided
+if choice == "join" or (len(sys.argv) > 1 and sys.argv[1] == "join"):
     run_client(screen)
 else:
-    print("Menu exited without choosing host or join.")
+    # Default: just run client in P2P mode
+    run_client(screen)
 
 pygame.quit()
