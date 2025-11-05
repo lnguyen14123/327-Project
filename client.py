@@ -73,8 +73,7 @@ def listen_peers(peers, peers_lock, chat_pub, stop_event, self_chat_uri):
             with peers_lock:
                 if peer_addr not in peers:
                     peers[peer_addr] = peer_chat_uri
-                    chat_pub.register(Pyro5.api.Proxy(
-                        peer_chat_uri), peer_addr)
+                    chat_pub.register(peer_chat_uri, peer_addr)
                     print(f"Discovered peer: {peer_addr}")
 
         except BlockingIOError:
@@ -159,8 +158,7 @@ def run_client(screen):
                 with peers_lock:
                     if addr not in remote_players:
                         remote_players[addr] = Player("purple", 40, 40)
-                        chat_pub.register(
-                            Pyro5.api.Proxy(remote_chat_uri), addr)
+                        chat_pub.register(remote_chat_uri, addr)
                     remote_players[addr].update_position(pygame.Vector2(x, y))
                     if remote_players[addr].rect.colliderect(player.rect):
                         chat_pub.collide(addr)
