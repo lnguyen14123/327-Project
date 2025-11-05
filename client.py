@@ -1,5 +1,6 @@
 import pygame
 from player import Player
+from chat_box import ChatBox
 from chat_pubsub import *
 import socket
 import pickle
@@ -97,6 +98,10 @@ def run_client(screen):
     chat_daemon = Pyro5.api.Daemon(host=OWN_IP)
     chat_uri = chat_daemon.register(chat_sub)
 
+    cbox = ChatBox()
+    # CHAT DEBUG
+    cbox.msgs_debug()
+
     threading.Thread(target=sub_thread, daemon=True,
                      args=(chat_daemon,)).start()
     threading.Thread(target=pub_thread, daemon=True, args=(chat_pub,)).start()
@@ -167,6 +172,8 @@ def run_client(screen):
         player.draw(screen)
         for p in remote_players.values():
             p.draw(screen)
+        # cbox.draw_debug(screen)
+        cbox.draw(screen)
         pygame.display.flip()
 
     # ------------------- CLEANUP -------------------
