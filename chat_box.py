@@ -27,14 +27,14 @@ class ChatBox:
     def draw(self, screen: pg.surface):
         """Draws chat messages on the screen"""
         for i in range(self.max_msg_count):
-            font_surf = self.font.render(self.chat_messages[i], True, "Black")
+            font_surf = self.font.render(self.chat_messages[self.max_msg_count-1-i], True, "Black")
             screen.blit(font_surf, self.msg_positions[i])
 
 
 
     def msgs_debug(self):
         """Add some test messages to the queue"""
-        self.chat_messages = ["This is a chat message", "This is also a chat message!", "This is a third chat message!", "How many chat messages are we gonna put in here?", "I think this should be the last one."]
+        self.chat_messages = ["This is a chat message 0", "This is also a chat message! 1", "This is a third chat message! 2", "How many chat messages are we gonna put in here? 3", "I think this should be the last one. 4"]
 
     def draw_debug(self, screen):
         """Draws the rectangles on the screen to make sure they're in the right spot"""

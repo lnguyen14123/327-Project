@@ -115,14 +115,15 @@ def run_client(screen):
         print('Failed to initialize game socket')
 
     # ------------------- CHAT SETUP -------------------
-    chat_pub = Publisher(OWN_IP, game_port)
-    chat_sub = Subscriber()
+    cbox = ChatBox()
+    # chatbox debug messages
+    cbox.msgs_debug()
+
+    chat_pub = Publisher(OWN_IP, game_port, cbox)
+    chat_sub = Subscriber(cbox)
     chat_daemon = Pyro5.api.Daemon(host=OWN_IP)
     chat_uri = chat_daemon.register(chat_sub)
-
-    cbox = ChatBox()
-    # CHAT DEBUG
-    cbox.msgs_debug()
+    
 
     threading.Thread(target=sub_thread, daemon=True,
                      args=(chat_daemon,)).start()
