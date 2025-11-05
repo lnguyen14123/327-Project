@@ -144,7 +144,7 @@ def run_client(screen):
         player.update(screen, dt)
 
         # ------------------- SEND LOCAL POSITION -------------------
-        data = pickle.dumps((player.position.x, player.position.y, chat_uri))
+        data = pickle.dumps((player.position.x, player.position.y))
         with peers_lock:
             for (peer_ip, peer_port), _ in peers.items():
                 game_sock.sendto(data, (peer_ip, peer_port))
@@ -153,10 +153,11 @@ def run_client(screen):
         try:
             while True:
                 recv_data, addr = game_sock.recvfrom(1024)
-                x, y, remote_chat_uri = pickle.loads(recv_data)
+                x, y = pickle.loads(recv_data)
 
                 with peers_lock:
                     if addr not in remote_players:
+                        remote_chat_uri = peers.get(addr)
                         remote_players[addr] = Player("purple", 40, 40)
                         chat_pub.register(remote_chat_uri, addr)
                     remote_players[addr].update_position(pygame.Vector2(x, y))
