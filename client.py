@@ -8,6 +8,7 @@ import Pyro5.api
 import threading
 import time
 import struct
+from queue import Queue
 
 # ------------------- SETTINGS -------------------
 OWN_IP = socket.gethostbyname(socket.gethostname())
@@ -23,11 +24,15 @@ def sub_thread(daemon: Pyro5.api.Daemon):
     daemon.requestLoop()
 
 
-def pub_thread(pub: Publisher):
+def pub_thread(pub: Publisher, chat_queue):
     """Handles outgoing chat messages from terminal."""
     while True:
-        msg = input()
-        pub.publish(msg)
+        try:
+            msg = chat_queue.get_nowait()
+            pub.publish(msg)
+        except:
+            pass
+        time.sleep(0.05)
 
 
 def announce_self(game_port, chat_uri, stop_event):
@@ -115,18 +120,22 @@ def run_client(screen):
         print('Failed to initialize game socket')
 
     # ------------------- CHAT SETUP -------------------
-    chat_pub = Publisher(OWN_IP, game_port)
-    chat_sub = Subscriber()
-    chat_daemon = Pyro5.api.Daemon(host=OWN_IP)
-    chat_uri = chat_daemon.register(chat_sub)
-
     cbox = ChatBox()
     # CHAT DEBUG
     cbox.msgs_debug()
 
+    chat_pub = Publisher(OWN_IP, game_port)
+    chat_sub = Subscriber(cbox)
+    chat_daemon = Pyro5.api.Daemon(host=OWN_IP)
+    chat_uri = chat_daemon.register(chat_sub)
+    chat_queue = Queue()
+
+    chat_pub.own_uri = chat_uri
+
     threading.Thread(target=sub_thread, daemon=True,
                      args=(chat_daemon,)).start()
-    threading.Thread(target=pub_thread, daemon=True, args=(chat_pub,)).start()
+    threading.Thread(target=pub_thread, daemon=True,
+                     args=(chat_pub, chat_queue,)).start()
 
     # ------------------- PEER DISCOVERY -------------------
     peers = {}  # peer_addr -> chat_uri
@@ -159,9 +168,16 @@ def run_client(screen):
 
     while running:
         dt = clock.tick(60) / 1000
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+
+            msg = cbox.handle_event(event)
+
+            if msg:
+                cbox.receive_chat(f"You: {msg}")
+                chat_queue.put(msg)
 
         # Update local player
         player.update(screen, dt)
@@ -183,9 +199,15 @@ def run_client(screen):
                         remote_chat_uri = peers.get(addr)
                         remote_players[addr] = Player("purple", 40, 40)
                         chat_pub.register(remote_chat_uri, addr)
+
                     remote_players[addr].update_position(pygame.Vector2(x, y))
                     if remote_players[addr].rect.colliderect(player.rect):
                         chat_pub.collide(addr)
+
+                # chat_msg = subscriber.get_message(addr)
+                # peer_name = str(addr)
+                # cbox.receive_chat(f"{peer_name}: {chat_msg}")
+
         except BlockingIOError:
             pass
 
