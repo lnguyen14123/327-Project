@@ -32,13 +32,21 @@ def pub_thread(pub: Publisher):
 
 def announce_self(game_port, chat_uri, stop_event):
     """Broadcast this client's existence using multicast."""
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-    sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 2)
+    try:
+        sock = socket.socket(
+            socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+        sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 2)
+    except e:
+        print(e)
 
     msg = pickle.dumps((OWN_IP, game_port, chat_uri))
     while not stop_event.is_set():
-        sock.sendto(msg, (DISCOVERY_GRP, DISCOVERY_PORT))
-        time.sleep(DISCOVERY_INTERVAL)
+        try:
+            sock.sendto(msg, (DISCOVERY_GRP, DISCOVERY_PORT))
+            time.sleep(DISCOVERY_INTERVAL)
+        except e:
+            print('Failed on self announce')
+            print(e)
 
 
 def listen_peers(peers, peers_lock, chat_pub, stop_event, self_chat_uri):
@@ -46,19 +54,29 @@ def listen_peers(peers, peers_lock, chat_pub, stop_event, self_chat_uri):
     Listen for discovery messages from other peers and add them to peers dict.
     Uses self_chat_uri to ignore your own announcements.
     """
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    try:
+        sock = socket.socket(
+            socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    except e:
+        print(e)
+        print("failed to set ports as reusable")
+
     try:
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT,
                         1)  # macOS / Linux
     except AttributeError:
         pass
 
-    sock.bind(('', DISCOVERY_PORT))
-    mreq = struct.pack("4s4s", socket.inet_aton(
-        DISCOVERY_GRP), socket.inet_aton("0.0.0.0"))
-    sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
-    sock.setblocking(False)
+    try:
+        sock.bind(('', DISCOVERY_PORT))
+        mreq = struct.pack("4s4s", socket.inet_aton(
+            DISCOVERY_GRP), socket.inet_aton("0.0.0.0"))
+        sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+        sock.setblocking(False)
+    except e:
+        print(e)
+        print("Failed to bind to discovery port")
 
     while not stop_event.is_set():
         try:
@@ -86,10 +104,15 @@ def listen_peers(peers, peers_lock, chat_pub, stop_event, self_chat_uri):
 
 def run_client(screen):
     # ------------------- GAME SOCKET -------------------
-    game_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    game_sock.bind((OWN_IP, 0))  # OS picks free port
-    game_port = game_sock.getsockname()[1]
-    game_sock.setblocking(False)
+    try:
+
+        game_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        game_sock.bind((OWN_IP, 0))  # OS picks free port
+        game_port = game_sock.getsockname()[1]
+        game_sock.setblocking(False)
+    except e:
+        print(e)
+        print('Failed to initialize game socket')
 
     # ------------------- CHAT SETUP -------------------
     chat_pub = Publisher(OWN_IP, game_port)
