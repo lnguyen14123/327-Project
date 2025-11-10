@@ -19,9 +19,18 @@ DISCOVERY_INTERVAL = 2         # seconds between broadcasts
 # ------------------- THREADS -------------------
 
 
-def sub_thread(daemon: Pyro5.api.Daemon):
+def sub_thread(daemon: Pyro5.api.Daemon, stop_event: threading.Event):
     """Handles incoming Pyro5 calls for chat/collision."""
-    daemon.requestLoop()
+    try:
+        # requestLoop accepts a loopCondition callable. Keep serving while not stopped.
+        daemon.requestLoop(loopCondition=lambda: not stop_event.is_set())
+    except Exception as e:
+        print("sub_thread error:", e)
+    finally:
+        try:
+            daemon.shutdown()
+        except Exception:
+            pass
 
 
 def pub_thread(pub: Publisher, chat_queue):
@@ -41,17 +50,27 @@ def announce_self(game_port, chat_uri, stop_event):
         sock = socket.socket(
             socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 2)
-    except e:
+    except Exception as e:
         print(e)
 
     msg = pickle.dumps((OWN_IP, game_port, chat_uri))
-    while not stop_event.is_set():
+
+    try:
+        while not stop_event.is_set():
+            try:
+                sock.sendto(msg, (DISCOVERY_GRP, DISCOVERY_PORT))
+            except Exception as e:
+
+                print('Failed on self announce')
+                print(e)
+
+            stop_event.wait(DISCOVERY_INTERVAL)
+
+    finally:
         try:
-            sock.sendto(msg, (DISCOVERY_GRP, DISCOVERY_PORT))
-            time.sleep(DISCOVERY_INTERVAL)
-        except e:
-            print('Failed on self announce')
-            print(e)
+            sock.close()
+        except Exception:
+            pass
 
 
 def listen_peers(peers, peers_lock, chat_pub, stop_event, self_chat_uri):
@@ -63,7 +82,8 @@ def listen_peers(peers, peers_lock, chat_pub, stop_event, self_chat_uri):
         sock = socket.socket(
             socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    except e:
+    except Exception as e:
+
         print(e)
         print("failed to set ports as reusable")
 
@@ -79,30 +99,37 @@ def listen_peers(peers, peers_lock, chat_pub, stop_event, self_chat_uri):
             DISCOVERY_GRP), socket.inet_aton("0.0.0.0"))
         sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
         sock.setblocking(False)
-    except e:
+    except Exception as e:
         print(e)
         print("Failed to bind to discovery port")
 
-    while not stop_event.is_set():
-        try:
-            data, addr = sock.recvfrom(1024)
-            peer_ip, peer_game_port, peer_chat_uri = pickle.loads(data)
+    try:
+        while not stop_event.is_set():
+            try:
+                data, addr = sock.recvfrom(1024)
+                peer_ip, peer_game_port, peer_chat_uri = pickle.loads(data)
 
-            # Ignore self by chat_uri
-            if peer_chat_uri == self_chat_uri:
+                # Ignore self by chat_uri
+                if peer_chat_uri == self_chat_uri:
+                    continue
+
+                peer_addr = (peer_ip, peer_game_port)
+                with peers_lock:
+                    if peer_addr not in peers:
+                        peers[peer_addr] = peer_chat_uri
+                        chat_pub.register(peer_chat_uri, peer_addr)
+                        print(f"Discovered peer: {peer_addr}")
+
+            except BlockingIOError:
                 continue
+            except Exception as e:
+                print("listen_peers error:", e)
 
-            peer_addr = (peer_ip, peer_game_port)
-            with peers_lock:
-                if peer_addr not in peers:
-                    peers[peer_addr] = peer_chat_uri
-                    chat_pub.register(peer_chat_uri, peer_addr)
-                    print(f"Discovered peer: {peer_addr}")
-
-        except BlockingIOError:
-            continue
-        except Exception as e:
-            print("listen_peers error:", e)
+    finally:
+        try:
+            sock.close()
+        except Exception:
+            pass
 
 # ------------------- CLIENT / GAME LOOP -------------------
 
@@ -115,7 +142,7 @@ def run_client(screen):
         game_sock.bind((OWN_IP, 0))  # OS picks free port
         game_port = game_sock.getsockname()[1]
         game_sock.setblocking(False)
-    except e:
+    except Exception as e:
         print(e)
         print('Failed to initialize game socket')
 
@@ -131,6 +158,10 @@ def run_client(screen):
     chat_queue = Queue()
 
     chat_pub.own_uri = chat_uri
+
+    stop_event = threading.Event()
+    threading.Thread(target=sub_thread, daemon=True,
+                     args=(chat_daemon, stop_event)).start()
 
     threading.Thread(target=sub_thread, daemon=True,
                      args=(chat_daemon,)).start()
@@ -222,5 +253,13 @@ def run_client(screen):
 
     # ------------------- CLEANUP -------------------
     stop_event.set()
-    chat_daemon.shutdown()
-    game_sock.close()
+
+    try:
+        # trigger proper shutdown of Pyro's request loop (sub_thread uses stop_event)
+        chat_daemon.shutdown()
+    except Exception:
+        pass
+    try:
+        game_sock.close()
+    except Exception:
+        pass
