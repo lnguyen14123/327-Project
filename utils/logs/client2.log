@@ -1,15 +1,596 @@
-pygame 2.6.1 (SDL 2.28.4, Python 3.12.6)
+Exception in thread Thread-6 (sub_thread):
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/threading.py", line 1043, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "/usr/lib/python3.13/threading.py", line 994, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: sub_thread() missing 1 required positional argument: 'stop_event'
+pygame 2.6.1 (SDL 2.28.4, Python 3.13.7)
 Hello from the pygame community. https://www.pygame.org/contribute.html
 Hello! wasd to move, arrow keys to shoot.
-Exception in thread Thread-6 (pub_thread):
-Traceback (most recent call last):
-  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/threading.py", line 1075, in _bootstrap_inner
-    self.run()
-  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/threading.py", line 1012, in run
-    self._target(*self._args, **self._kwargs)
-  File "/Users/lucnguyen/Documents/Fall2025/327/project/327-Project/client.py", line 29, in pub_thread
-    msg = input()
-          ^^^^^^^
-EOFError: EOF when reading a line
-Discovered peer: ('127.0.0.1', 55271)
-Discovered peer: ('127.0.0.1', 62099)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+No subscriber found for ('192.168.1.19', 56223)
+Discovered peer: ('192.168.1.19', 56223)
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+Discovered peer: ('192.168.1.19', 43970)
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 56223)!
+You just collided with the player at ('192.168.1.19', 43970)!
+You just collided with the player at ('192.168.1.19', 43970)!
