@@ -9,6 +9,8 @@ import threading
 import time
 import struct
 from queue import Queue
+from lamport_clock import LamportClock
+
 
 # ------------------- SETTINGS -------------------
 OWN_IP = socket.gethostbyname(socket.gethostname())
@@ -151,11 +153,13 @@ def run_client(screen):
     # CHAT DEBUG
     cbox.msgs_debug()
 
-    chat_pub = Publisher(OWN_IP, game_port)
-    chat_sub = Subscriber(cbox)
+    lamport = LamportClock()
+
+    chat_sub = Subscriber(cbox, lamport=lamport)
     chat_daemon = Pyro5.api.Daemon(host=OWN_IP)
     chat_uri = chat_daemon.register(chat_sub)
     chat_queue = Queue()
+    chat_pub = Publisher(OWN_IP, game_port, own_uri=chat_uri, lamport=lamport)
 
     chat_pub.own_uri = chat_uri
 

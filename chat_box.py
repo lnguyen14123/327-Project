@@ -28,7 +28,8 @@ class ChatBox:
         """Draws chat messages and input text"""
         # Draw chat messages
         for i in range(min(self.max_msg_count, len(self.chat_messages))):
-            font_surf = self.font.render(self.chat_messages[i], True, "Black")
+            msg = self.chat_messages[i][1]  # get string
+            font_surf = self.font.render(msg, True, "Black")
             screen.blit(font_surf, self.msg_positions[i])
 
         # Draw input box
@@ -49,9 +50,26 @@ class ChatBox:
         pg.draw.rect(screen, "White", self.full_rect)
         pg.draw.rect(screen, "Gray", self.input_rect)
 
-    def receive_chat(self, msg):
-        """Add a message, remove oldest if needed"""
-        self.chat_messages.append(msg)
+    def receive_chat(self, msg_with_ts):
+        """
+        Add a message with Lamport timestamp. 
+        msg_with_ts should already include [ts] in the string for display.
+        We'll parse ts to sort messages.
+        """
+        # Parse ts from string: assume format "[ts] rest of message"
+        try:
+            ts_end = msg_with_ts.index("]")
+            ts = int(msg_with_ts[1:ts_end])
+        except:
+            ts = 0  # fallback
+
+        # Store as tuple (timestamp, message)
+        self.chat_messages.append((ts, msg_with_ts))
+
+        # Sort by timestamp so messages appear in order
+        self.chat_messages.sort(key=lambda x: x[0])
+
+        # Keep only last max_msg_count messages
         while len(self.chat_messages) > self.max_msg_count:
             self.chat_messages.pop(0)
 
