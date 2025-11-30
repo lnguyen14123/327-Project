@@ -2,6 +2,8 @@ import pygame
 
 
 class Player(pygame.sprite.Sprite):
+    _id_counter = 0
+
     def __init__(self, color, width, height):
         # parent class constructor
         pygame.sprite.Sprite.__init__(self)
@@ -28,6 +30,9 @@ class Player(pygame.sprite.Sprite):
         self.bullets = pygame.sprite.Group()
         self.bullet_speed = 200
 
+        self.id = f"Player{Player._id_counter}"
+        Player._id_counter += 1
+
     def movement_handler(self, dt, screen_width=1280, screen_height=720):
 
         # create temporary position variable
@@ -49,7 +54,7 @@ class Player(pygame.sprite.Sprite):
             pos.x += self.movespeed * dt
 
         # detect edges of screen
-        # hardcoding the screen size at 720p (1280x720). 
+        # hardcoding the screen size at 720p (1280x720).
         # hope this doesn't suck to decouple later if we end up needing to!
         # also fun fact: pygame coordinates are really weird!
         # the top LEFT of the screen is (0,0), and the y coordinate gets BIGGER as you go down
