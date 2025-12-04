@@ -213,6 +213,9 @@ def run_client(screen):
                 print("Failed sending REQUEST_ITEMS:", e)
 
     # ------------------- MAIN LOOP -------------------
+
+    colliding_with = set()
+
     while running:
         dt = clock.tick(60) / 1000
         for event in pygame.event.get():
@@ -244,8 +247,17 @@ def run_client(screen):
                         remote_players[addr] = Player("purple", 40, 40)
                         chat_pub.register(remote_uri, addr)
                     remote_players[addr].update_position(pygame.Vector2(x, y))
+
                     if remote_players[addr].rect.colliderect(player.rect):
-                        chat_pub.collide(addr)
+                        # Collision START
+                        if addr not in colliding_with:
+                            colliding_with.add(addr)
+                            chat_pub.collide(addr)   # ← send ONCE
+
+                        else:
+                            # Collision END
+                            if addr in colliding_with:
+                                colliding_with.remove(addr)
         except BlockingIOError:
             pass
 
