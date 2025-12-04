@@ -12,7 +12,7 @@ class ChatBox:
 
         px_msg = (self.full_rect.height - offset) / self.max_msg_count
         self.msg_positions = []
-        setup_pos = 720-50
+        setup_pos = 720-100
         for i in range(self.max_msg_count):
             self.msg_positions.append((0, setup_pos))
             setup_pos -= px_msg
@@ -21,22 +21,14 @@ class ChatBox:
         self.input_text = ""
 
     def draw(self, screen: pg.Surface):
-        for i in range(min(self.max_msg_count, len(self.chat_messages))):
-            msg = self.chat_messages[i][1]
+
+        for i, (ts, msg) in enumerate(reversed(self.chat_messages[-self.max_msg_count:])):
             font_surf = self.font.render(msg, True, "Black")
             screen.blit(font_surf, self.msg_positions[i])
 
         pg.draw.rect(screen, "Gray", self.input_rect)
         input_surf = self.font.render(self.input_text, True, "Black")
         screen.blit(input_surf, (self.input_rect.x + 5, self.input_rect.y + 5))
-
-    def msgs_debug(self):
-        # Store as (ts, msg) tuples
-        self.chat_messages = [(0, "This is a chat message"),
-                              (1, "This is also a chat message!"),
-                              (2, "This is a third chat message!"),
-                              (3, "How many chat messages are we gonna put in here?"),
-                              (4, "I think this should be the last one.")]
 
     def draw_debug(self, screen):
         pg.draw.rect(screen, "White", self.full_rect)
