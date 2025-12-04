@@ -214,7 +214,8 @@ def run_client(screen):
 
     # ------------------- MAIN LOOP -------------------
 
-    colliding_with = set()
+    collision_cooldown = {}   # addr -> last_time_sent
+    COLLISION_COOLDOWN_SECONDS = 1.0
 
     while running:
         dt = clock.tick(60) / 1000
@@ -246,18 +247,18 @@ def run_client(screen):
                         remote_uri = peers.get(addr)
                         remote_players[addr] = Player("purple", 40, 40)
                         chat_pub.register(remote_uri, addr)
+
                     remote_players[addr].update_position(pygame.Vector2(x, y))
 
-                    if remote_players[addr].rect.colliderect(player.rect):
-                        # Collision START
-                        if addr not in colliding_with:
-                            colliding_with.add(addr)
-                            chat_pub.collide(addr)   # ← send ONCE
+                    now = time.time()
 
-                        else:
-                            # Collision END
-                            if addr in colliding_with:
-                                colliding_with.remove(addr)
+                    if remote_players[addr].rect.colliderect(player.rect):
+                        last_time = collision_cooldown.get(addr, 0)
+
+                        # only send if cooldown passed
+                        if now - last_time >= COLLISION_COOLDOWN_SECONDS:
+                            collision_cooldown[addr] = now
+                            chat_pub.collide(addr)
         except BlockingIOError:
             pass
 
